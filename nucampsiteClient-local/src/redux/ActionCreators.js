@@ -411,9 +411,8 @@ export const registerUserFailed = errMess => ({
     payload: errMess
 });
 
-export const registerUserSuccess = favorites => ({
-    type: ActionTypes.REGISTER_USER_SUCCESS,
-    payload: favorites
+export const registerUserSuccess = () => ({
+    type: ActionTypes.REGISTER_USER_SUCCESS
 });
 
 export const registerUser = creds => dispatch => {
