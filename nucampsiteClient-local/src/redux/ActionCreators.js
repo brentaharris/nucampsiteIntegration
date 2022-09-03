@@ -239,6 +239,7 @@ export const loginError = message => {
     }
 }
 
+///////////////////////////////////////////////////////////////////////////
 export const loginUser = creds => dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds))
@@ -402,22 +403,29 @@ export const addFavorites = favorites => ({
 
 // register user handling
 
-export const requestRegisterUser = () => ({
-    type: ActionTypes.REGISTER_USER_REQUEST
-});
+export const requestRegisterUser = creds => {
+    return {
+    type: ActionTypes.REGISTER_USER_REQUEST,
+    creds
+}};
 
-export const registerUserFailed = errMess => ({
+export const receiveRegisterUser = message => {
+    return {
+    type: ActionTypes.REGISTER_USER_SUCCESS,
+    message
+}};
+
+export const registerUserError = message => {
+    return {
     type: ActionTypes.REGISTER_USER_FAILURE,
-    payload: errMess
-});
+    message
+}};
 
-export const registerUserSuccess = () => ({
-    type: ActionTypes.REGISTER_USER_SUCCESS
-});
 
 export const registerUser = creds => dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestRegisterUser(creds))
+    console.log(creds)
 
     return fetch(baseUrl + 'users/signup', {
         method: 'POST',
@@ -441,16 +449,15 @@ export const registerUser = creds => dispatch => {
     .then(response => {
         if (response.success) {
             // If register user was successful ????
-            // localStorage.setItem('token', response.token);
+            localStorage.setItem('token', response.token);
             localStorage.setItem('creds', JSON.stringify(creds));
             // Dispatch the success action
-            // dispatch(fetchFavorites());
-            dispatch(registerUserSuccess(response));
+            dispatch(receiveRegisterUser(response));
         } else {
             const error = new Error('Error ' + response.status);
             error.response = response;
             throw error;
         }
     })
-    .catch(error => dispatch(registerUserFailed(error.message)))
+    .catch(error => dispatch(registerUserError(error.message)))
 };

@@ -43,7 +43,9 @@ class Header extends Component {
 
     handleLogin(event) {
         this.toggleModal();
-        this.props.loginUser({username: this.username.value, password: this.password.value});
+        this.props.loginUser({
+            username: this.username.value, 
+            password: this.password.value});
         event.preventDefault();
 
     }
@@ -54,7 +56,7 @@ class Header extends Component {
 
     handleRegisterUser(event) {
         this.toggleRegisterModal();
-        this.props.handleRegisterUser({
+        this.props.registerUser({
             firstname: this.firstname.value,
             lastname: this.lastname.value,
             username: this.username.value,
@@ -189,7 +191,7 @@ class Header extends Component {
                                     innerRef={input => this.firstname = input} />
                             </FormGroup>
                             <FormGroup>
-                                <Label htmlFor="username">Last Name</Label>
+                                <Label htmlFor="lastname">Last Name</Label>
                                 <Input type="text" id="lastname" name="lastname"
                                     innerRef={input => this.lastname = input} />
                             </FormGroup>

@@ -8,6 +8,7 @@ import { Partners } from './partners';
 import { Promotions } from './promotions';
 import { favorites } from './favorites';
 import { Auth } from './auth';
+import { Register } from './register';
 
 import { InitialFeedback } from './forms';
 
@@ -19,6 +20,7 @@ export const ConfigureStore = () => {
             partners: Partners,
             promotions: Promotions,
             auth: Auth,
+            register: Register,
             favorites,
             ...createForms({
                 feedbackForm: InitialFeedback
