@@ -399,3 +399,59 @@ export const addFavorites = favorites => ({
     type: ActionTypes.ADD_FAVORITES,
     payload: favorites
 });
+
+// register user handling
+
+export const requestRegisterUser = () => ({
+    type: ActionTypes.REGISTER_USER_REQUEST
+});
+
+export const registerUserFailed = errMess => ({
+    type: ActionTypes.REGISTER_USER_FAILURE,
+    payload: errMess
+});
+
+export const registerUserSuccess = favorites => ({
+    type: ActionTypes.REGISTER_USER_SUCCESS,
+    payload: favorites
+});
+
+export const registerUser = creds => dispatch => {
+    // We dispatch requestLogin to kickoff the call to the API
+    dispatch(requestRegisterUser(creds))
+
+    return fetch(baseUrl + 'users/signup', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(creds)
+    })
+    .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => { throw error; }
+    )
+    .then(response => response.json())
+    .then(response => {
+        if (response.success) {
+            // If register user was successful ????
+            // localStorage.setItem('token', response.token);
+            localStorage.setItem('creds', JSON.stringify(creds));
+            // Dispatch the success action
+            // dispatch(fetchFavorites());
+            dispatch(registerUserSuccess(response));
+        } else {
+            const error = new Error('Error ' + response.status);
+            error.response = response;
+            throw error;
+        }
+    })
+    .catch(error => dispatch(registerUserFailed(error.message)))
+};

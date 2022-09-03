@@ -11,13 +11,16 @@ class Header extends Component {
 
         this.state = {
             isNavOpen: false,
-            isModalOpen: false
+            isModalOpen: false,
+            isRegisterModalOpen: false
         };
 
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
+        this.toggleRegisterModal = this.toggleRegisterModal.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.handleRegisterUser = this.handleRegisterUser.bind(this);
     }
 
     toggleNav() {
@@ -32,6 +35,12 @@ class Header extends Component {
         });
     }
 
+    toggleRegisterModal() {
+        this.setState({
+            isRegisterModalOpen: !this.state.isRegisterModalOpen
+        });
+    }
+
     handleLogin(event) {
         this.toggleModal();
         this.props.loginUser({username: this.username.value, password: this.password.value});
@@ -41,6 +50,17 @@ class Header extends Component {
 
     handleLogout() {
         this.props.logoutUser();
+    }
+
+    handleRegisterUser(event) {
+        this.toggleRegisterModal();
+        this.props.handleRegisterUser({
+            firstname: this.firstname.value,
+            lastname: this.lastname.value,
+            username: this.username.value,
+            password: this.password.value
+         })
+        event.preventDefault()
     }
 
     render() {
@@ -93,7 +113,23 @@ class Header extends Component {
                                 <NavItem>
                                     { !this.props.auth.isAuthenticated 
                                         ?
-                                        <Button outline onClick={this.toggleModal}>
+                                        <Button outline style={{ color: 'white' }} onClick={this.toggleRegisterModal}>
+                                            <i className="fa fa-sign-in fa-lg" /> Sign Up
+                                            {this.props.auth.isFetching 
+                                                ? <span className="fa fa-spinner fa-pulse fa-fw" />
+                                                : null
+                                            }
+                                        </Button>
+                                        :
+                                        null
+                                    }
+                                </NavItem>
+                            </Nav>
+                            <Nav className="ml-2" navbar>
+                                <NavItem>
+                                    { !this.props.auth.isAuthenticated 
+                                        ?
+                                        <Button outline style={{ color: 'white' }} onClick={this.toggleModal}>
                                             <i className="fa fa-sign-in fa-lg" /> Login
                                             {this.props.auth.isFetching 
                                                 ? <span className="fa fa-spinner fa-pulse fa-fw" />
@@ -140,6 +176,34 @@ class Header extends Component {
                                 </Label>
                             </FormGroup>
                             <Button type="submit" value="submit" color="primary">Login</Button>
+                        </Form>
+                    </ModalBody>
+                </Modal>
+                <Modal isOpen={this.state.isRegisterModalOpen} toggle={this.toggleRegisterModal}>
+                    <ModalHeader toggle={this.toggleRegisterModal}>Register User</ModalHeader>
+                    <ModalBody>
+                        <Form onSubmit={this.handleRegisterUser}>
+                            <FormGroup>
+                                <Label htmlFor="firstname">First Name</Label>
+                                <Input type="text" id="firstname" name="firstname"
+                                    innerRef={input => this.firstname = input} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label htmlFor="username">Last Name</Label>
+                                <Input type="text" id="lastname" name="lastname"
+                                    innerRef={input => this.lastname = input} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label htmlFor="username">Username</Label>
+                                <Input type="text" id="username" name="username"
+                                    innerRef={input => this.username = input} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label htmlFor="password">Password</Label>
+                                <Input type="password" id="password" name="password"
+                                    innerRef={input => this.password = input} />
+                            </FormGroup>
+                            <Button type="submit" value="submit" color="primary">Register</Button>
                         </Form>
                     </ModalBody>
                 </Modal>
