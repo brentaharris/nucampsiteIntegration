@@ -14,12 +14,6 @@ class Header extends Component {
             isNavOpen: false,
             isModalOpen: false,
             isRegisterModalOpen: false,
-            // user: {
-            //     firstName: '',
-            //     lastName: '',
-            //     username: '',
-            //     password: ''
-            // }
         };
 
         this.toggleNav = this.toggleNav.bind(this);
@@ -76,15 +70,8 @@ class Header extends Component {
         })
     }
 
-      // this.props.registerUser({
-        //     firstName: this.firstName.value,
-        //     lastName: this.lastName.value,
-        //     username: this.username.value,
-        //     password: this.password.value
-        // })
 
     render() {
-        // const { user } = this.state;
         return (
             <React.Fragment>
                 <Jumbotron fluid>

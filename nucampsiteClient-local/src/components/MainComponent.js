@@ -11,7 +11,7 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
 import { postComment, postFeedback, fetchCampsites, fetchComments, fetchPromotions, fetchPartners,
-    loginUser, logoutUser, registerUser, fetchFavorites, postFavorite, deleteFavorite } from '../redux/ActionCreators';
+    loginUser, logoutUser, fetchFavorites, postFavorite, deleteFavorite } from '../redux/ActionCreators';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapStateToProps = state => {
@@ -22,7 +22,6 @@ const mapStateToProps = state => {
         promotions: state.promotions, 
         favorites: state.favorites,
         auth: state.auth,
-        user: state.user
     };
 };
 
@@ -36,7 +35,6 @@ const mapDispatchToProps = {
     fetchPartners: () => (fetchPartners()),
     loginUser: creds => (loginUser(creds)),
     logoutUser: () => (logoutUser()),
-    registerUser: user => (registerUser(user)),
     fetchFavorites: () => (fetchFavorites()),
     postFavorite: (campsiteId) => (postFavorite(campsiteId)),
     deleteFavorite: (campsiteId) => (deleteFavorite(campsiteId))
@@ -120,7 +118,6 @@ class Main extends Component {
                 <Header auth={this.props.auth} 
                     loginUser={this.props.loginUser} 
                     logoutUser={this.props.logoutUser} 
-                    registerUser={this.props.registerUser}
                 />   
                 <TransitionGroup>
                     <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>

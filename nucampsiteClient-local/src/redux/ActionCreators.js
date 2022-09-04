@@ -2,66 +2,6 @@ import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
 
-/////////////// register user handling /////////////////
-
-export const requestRegisterUser = user => {
-    return {
-    type: ActionTypes.REGISTER_USER_REQUEST,
-    user
-}};
-
-export const receiveRegisterUser = user => {
-    return {
-    type: ActionTypes.REGISTER_USER_SUCCESS,
-    user
-}};
-
-export const registerUserError = errMess => {
-    return {
-    type: ActionTypes.REGISTER_USER_FAILURE,
-    errMess
-}};
-
-
-export const registerUser = (user) => dispatch => {
-
-    // We dispatch request registerUser to start call to the API
-    dispatch(requestRegisterUser(user))
-    console.log(user)
-
-    return fetch(baseUrl + 'users/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    })
-    .then(response => {
-            if (response.ok) {
-                return response;
-            } else {
-                const error = new Error(`Error ${response.status}: ${response.statusText}`);
-                error.response = response;
-                throw error;
-            }
-        },
-        error => { throw error; }
-    )
-    .then(response => response.json())
-    .then(response => {
-        if (response.success) {
-            // If register user was successful 
-            // Dispatch the success action
-            dispatch(receiveRegisterUser(response));
-        } else {
-            const error = new Error('Error ' + response.status);
-            error.response = response;
-            throw error;
-        }
-    })
-    .catch(error => dispatch(registerUserError(error.message)))
-};
-
-/////////////////////////////////////////////////////////////////////////////////////
-
 export const fetchCampsites = () => dispatch => {
     dispatch(campsitesLoading());
 
