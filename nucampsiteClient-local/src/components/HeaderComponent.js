@@ -3,6 +3,7 @@ import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+import { baseUrl } from '../shared/baseUrl';
 
 class Header extends Component {
 
@@ -12,7 +13,13 @@ class Header extends Component {
         this.state = {
             isNavOpen: false,
             isModalOpen: false,
-            isRegisterModalOpen: false
+            isRegisterModalOpen: false,
+            // user: {
+            //     firstName: '',
+            //     lastName: '',
+            //     username: '',
+            //     password: ''
+            // }
         };
 
         this.toggleNav = this.toggleNav.bind(this);
@@ -55,17 +62,29 @@ class Header extends Component {
     }
 
     handleRegisterUser(event) {
-        this.toggleRegisterModal();
-        this.props.registerUser({
-            firstname: this.firstname.value,
-            lastname: this.lastname.value,
-            username: this.username.value,
-            password: this.password.value
-         })
         event.preventDefault()
+        this.toggleRegisterModal();
+        return fetch(baseUrl + 'users/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                firstName: this.firstName.value,
+                lastName: this.lastName.value,
+                username: this.username.value,
+                password: this.password.value
+            })
+        })
     }
 
+      // this.props.registerUser({
+        //     firstName: this.firstName.value,
+        //     lastName: this.lastName.value,
+        //     username: this.username.value,
+        //     password: this.password.value
+        // })
+
     render() {
+        // const { user } = this.state;
         return (
             <React.Fragment>
                 <Jumbotron fluid>
@@ -188,12 +207,12 @@ class Header extends Component {
                             <FormGroup>
                                 <Label htmlFor="firstname">First Name</Label>
                                 <Input type="text" id="firstname" name="firstname"
-                                    innerRef={input => this.firstname = input} />
+                                    innerRef={input => this.firstName = input} />
                             </FormGroup>
                             <FormGroup>
                                 <Label htmlFor="lastname">Last Name</Label>
                                 <Input type="text" id="lastname" name="lastname"
-                                    innerRef={input => this.lastname = input} />
+                                    innerRef={input => this.lastName = input} />
                             </FormGroup>
                             <FormGroup>
                                 <Label htmlFor="username">Username</Label>
@@ -209,7 +228,6 @@ class Header extends Component {
                         </Form>
                     </ModalBody>
                 </Modal>
-
             </React.Fragment>
         );
     }
